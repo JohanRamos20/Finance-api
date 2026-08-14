@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" 
+  db_test:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_test
+    volumes:
+      - db_test_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  db_test_data:
+  db_data:
+  redis_data:

@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Category {
+  LEISURE
+  GROCERIES
+  EXPENSES
+  SHOPPING
+  FOOD
+  SALARY
+}
+
+enum TransactionType {
+  DEBIT
+  CREDIT
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  wallet Wallet?
+  goals  Goal[]
+}
+
+model Wallet {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id              String          @id @default(uuid())
+  walletId        String
+  name            String
+  category        Category
+  amount          Decimal         @db.Decimal(14, 2)
+  transactionType TransactionType
+  createdAt       DateTime        @default(now())
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@index([walletId])
+  @@index([createdAt])
+}
+
+model Goal {
+  id           String   @id @default(uuid())
+  userId       String
+  name         String
+  description  String
+  targetAmount Decimal  @db.Decimal(14, 2)
+  savedAmount  Decimal  @default(0) @db.Decimal(14, 2)
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  event     String
+  userId    String
+  entityId  String
+  data      Json
+  createdAt DateTime @default(now())
+}

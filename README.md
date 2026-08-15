@@ -1,4 +1,4 @@
-# API — Controle Financeiro Pessoal
+# API — Finance
 
 API REST para controle financeiro pessoal: cadastro de usuários, autenticação, carteira com saldo em cache, lançamento de transações (receitas e despesas) e metas de economia com depósitos incrementais.
 
